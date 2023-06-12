@@ -1,0 +1,43 @@
+* {
+    margin: 0;
+}
+
+#container {
+    margin-top: 100px;
+}
+
+#gameboard {
+    margin: auto;
+    height: 800px;
+    width: 800px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.block {
+    height: 100px;
+    width: 100px;
+    background-color: gray;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 1px solid black;
+
+}
+
+#controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+div.button {
+    background-color: blueviolet;
+    height: 20px;
+    width: 100px;
+}
+
+/* https://developer.mozilla.org/en-US/docs/Learn/HTML/Howto/Use_data_attributes */
+/* Target using data attributes */
+

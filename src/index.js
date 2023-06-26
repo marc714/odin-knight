@@ -1,33 +1,143 @@
+import './styles/style.css'
+import knightIconJPG from './knight-icon.jpg'
+//import { chessBoardSquares } from './gameboard'
+
+const resetBtn = document.querySelector('#reset')
+const knightBtn = document.querySelector("#knight")
+const travailBtn = document.querySelector("#travail")
+const display = document.querySelector("#display")
+const msg = document.querySelector("#message")
+const gameBoardCtn = document.querySelector("#gameboard")
+const gameBoardBlocks = document.querySelectorAll(".block")
+knightBtn.addEventListener("click", knight)
+travailBtn.addEventListener("click", traverse)
+gameBoardCtn.addEventListener("click", gameBoardOff)
+resetBtn.addEventListener("click", reset)
+let moves = [];
+
+function reset() {
+    location.reload();
+}
+
+function traverse() {
+    if(moves.length == 0) {
+        message("First place starting Knight")
+    } else if (moves.length == 1) {
+        message("Place where you want your knight to go")
+    } else if (moves.length == 2) {
+        console.log(moves[0] + moves[1])
+        let results = chessGraph.breadthFirstTraversal(moves[0], moves[1])
+        message("")
+        displayMoves("Congrats! The shortest path is: " + results.reverse())
+        results.forEach(el => {
+            highlight(el);
+        })
+    }
+}
+
+function highlight(shortestPathString) {
+    gameBoardBlocks.forEach(block => {
+        if(shortestPathString == block.dataset.array) {
+            block.style.borderColor = "red"
+            block.style.borderWidth = "thick"
+        }
+    })
+}
+
+// clicking on Knight button turns on gameBoard()
+const gameBoard = () => {
+    // placing this inside so that we can turn it on/off   
+    const squares = document.querySelectorAll(".block")
+    squares.forEach(el => {
+        el.addEventListener("click", getTile)  
+        el.addEventListener("click", knightIcon)            
+    })
+};
+
+// display knight icon
+function knightIcon(e) { 
+    e.target.style.backgroundColor = "red"
+    e.target.style.backgroundImage = "url('knight-icon.jpg')"
+    e.target.style.backgroundSize = 'contain';
+
+}
+
+// remove all event listeners to prevent more than 2 knights
+function gameBoardOff() {
+    if (moves.length == 2) {
+        const squares = document.querySelectorAll(".block");
+        squares.forEach(el => {
+            el.removeEventListener("click", getTile)
+        })
+    }
+}
+
+// on click, get tile's data-array e.g. div "a1"
+function getTile(e) {
+    console.log(e.target.getAttribute("data-array"))
+    let chessSquare = stringToNode(e.target.dataset.array)
+    moves.push(chessSquare)
+    displayMoves(e.target.dataset.array)
+    if (moves[1] == null) {
+        message("Place where you want the knight to go")
+    }
+    if (moves[1] != null) {
+        message("Click on Traverse!")
+    }
+}
+
+// helper function for getTile() 
+// why can't stringToNode return a value (don't use forEach to return values).
+function stringToNode(datasetArray) {
+    const temp = chessBoardSquares.find(el => el.value == datasetArray);
+    return temp;
+}
+
+// click on knight btn (activates gameboard), then click on square 1, then square 2, sends coordinates to knight(). click on Traverse takes knight data.
+function knight() {
+    console.log("hello")
+    message("Place your knight")
+    gameBoard(); // activate game board
+};
+
+function message(message) {
+    msg.innerText = message
+}
+
+function displayMoves(tile) {
+    display.innerText = tile.toString()
+}
+
 class Node {
-    constructor (value) {
+    constructor(value) {
         this.value = value
         this.edgesList = []
     }
 
-    connect (node) {  // connects both directions, but since we are using the adjList{} above...
+    connect(node) {  // connects both directions, but since we are using the adjList{} above...
         this.edgesList.push(node)
         node.edgesList.push(this)
     }
 
-    getAdjacentNodes () {
+    getAdjacentNodes() {
         return this.edgesList
     }
 
-    isConnected (node) {
+    isConnected(node) {
         return !!this.edgesList.find(edge => edge.value === node.value)
     }
 }
 
 class Graph {
-    constructor (nodes) {
-        this.nodes = [...nodes]  // const graph = new Graph("a1", "a2", "a3")
+    constructor(nodes) {
+        this.nodes = [...nodes]  // const graph = new Graph(["a1", "a2", "a3"])
     }
 
-    addToGraph (node) {
+    addToGraph(node) {
         this.nodes.push(node)
     }
 
-    reconstructPath (visitedNodes, startNode, endNode) {
+    reconstructPath(visitedNodes, startNode, endNode) {
         let currentNode = endNode;
         const shortestPath = [];
 
@@ -37,7 +147,7 @@ class Graph {
             console.log(currentNode)
         }
         console.log(`Congrats. The path from ${startNode.value} to ${endNode.value} is: ` + shortestPath.reverse())
-        console.log(shortestPath.reverse())
+        //console.log(shortestPath.reverse())
         return shortestPath.reverse();
     }
 
@@ -67,7 +177,6 @@ class Graph {
 
     }
 }
-
 
 const a1 = new Node("a1")
 const a2 = new Node("a2")
@@ -226,45 +335,64 @@ c6.edgesList = adjList2["c6"];
 c7.edgesList = adjList2["c7"];
 c8.edgesList = adjList2["c8"];
 d1.edgesList = adjList2["d1"];
-d1.edgesList = adjList2["d2"];
-d1.edgesList = adjList2["d3"];
-d1.edgesList = adjList2["d4"];
-d1.edgesList = adjList2["d5"];
-d1.edgesList = adjList2["d6"];
-d1.edgesList = adjList2["d7"];
-d1.edgesList = adjList2["d8"];
+d2.edgesList = adjList2["d2"];
+d3.edgesList = adjList2["d3"];
+d4.edgesList = adjList2["d4"];
+d5.edgesList = adjList2["d5"];
+d6.edgesList = adjList2["d6"];
+d7.edgesList = adjList2["d7"];
+d8.edgesList = adjList2["d8"];
 e1.edgesList = adjList2["e1"];
-e1.edgesList = adjList2["e2"];
-e1.edgesList = adjList2["e3"];
-e1.edgesList = adjList2["e4"];
-e1.edgesList = adjList2["e5"];
-e1.edgesList = adjList2["e6"];
-e1.edgesList = adjList2["e7"];
-e1.edgesList = adjList2["e8"];
+e2.edgesList = adjList2["e2"];
+e3.edgesList = adjList2["e3"];
+e4.edgesList = adjList2["e4"];
+e5.edgesList = adjList2["e5"];
+e6.edgesList = adjList2["e6"];
+e7.edgesList = adjList2["e7"];
+e8.edgesList = adjList2["e8"];
 f1.edgesList = adjList2["f1"];
-f1.edgesList = adjList2["f2"];
-f1.edgesList = adjList2["f3"];
-f1.edgesList = adjList2["f4"];
-f1.edgesList = adjList2["f5"];
-f1.edgesList = adjList2["f6"];
-f1.edgesList = adjList2["f7"];
-f1.edgesList = adjList2["f8"];
+f2.edgesList = adjList2["f2"];
+f3.edgesList = adjList2["f3"];
+f4.edgesList = adjList2["f4"];
+f5.edgesList = adjList2["f5"];
+f6.edgesList = adjList2["f6"];
+f7.edgesList = adjList2["f7"];
+f8.edgesList = adjList2["f8"];
 g1.edgesList = adjList2["g1"];
-g1.edgesList = adjList2["g2"];
-g1.edgesList = adjList2["g3"];
-g1.edgesList = adjList2["g4"];
-g1.edgesList = adjList2["g5"];
-g1.edgesList = adjList2["g6"];
-g1.edgesList = adjList2["g7"];
-g1.edgesList = adjList2["g8"];
+g2.edgesList = adjList2["g2"];
+g3.edgesList = adjList2["g3"];
+g4.edgesList = adjList2["g4"];
+g5.edgesList = adjList2["g5"];
+g6.edgesList = adjList2["g6"];
+g7.edgesList = adjList2["g7"];
+g8.edgesList = adjList2["g8"];
 h1.edgesList = adjList2["h1"];
-h1.edgesList = adjList2["h2"];
-h1.edgesList = adjList2["h3"];
-h1.edgesList = adjList2["h4"];
-h1.edgesList = adjList2["h5"];
-h1.edgesList = adjList2["h6"];
-h1.edgesList = adjList2["h7"];
-h1.edgesList = adjList2["h8"];
+h2.edgesList = adjList2["h2"];
+h3.edgesList = adjList2["h3"];
+h4.edgesList = adjList2["h4"];
+h5.edgesList = adjList2["h5"];
+h6.edgesList = adjList2["h6"];
+h7.edgesList = adjList2["h7"];
+h8.edgesList = adjList2["h8"];
+
+//remember, below array elements are objects, not strings. Array is for stringToNode()src/index.js
+const chessBoardSquares = [ a1, a2, a3, a4, a5, a6, a7, a8,
+                            b1, b2, b3, b4, b5, b6, b7, b8, 
+                            c1, c2, c3, c4, c5, c6, c7, c8,
+                            d1, d2, d3, d4, d5, d6, d7, d8,
+                            e1, e2, e3, e4, e5, e6, e7, e8,
+                            f1, f2, f3, f4, f5, f6, f7, f8,
+                            g1, g2, g3, g4, g5, g6, g7, g8,
+                            h1, h2, h3, h4, h5, h6, h7, h8 ]
+
+const chessGraph = new Graph([a1, a2, a3, a4, a5, a6, a7, a8,
+                              b1, b2, b3, b4, b5, b6, b7, b8, 
+                              c1, c2, c3, c4, c5, c6, c7, c8,
+                              d1, d2, d3, d4, d5, d6, d7, d8,
+                              e1, e2, e3, e4, e5, e6, e7, e8,
+                              f1, f2, f3, f4, f5, f6, f7, f8,
+                              g1, g2, g3, g4, g5, g6, g7, g8,
+                              h1, h2, h3, h4, h5, h6, h7, h8]);
+// bst.breadthFirstTraversal(a1, a5)
 
 
-export { Graph }

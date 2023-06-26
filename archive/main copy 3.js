@@ -1,3 +1,9 @@
+import './styles/style.css'
+import knightIconJPG from './knight-icon.jpg'
+
+// const chessKnightImage = new Image();
+// chessKnightImage.src = knightIconJPG;
+
 //import { Graph } from "./gameboard";
 
 // gameboard can make divs, or use template divs. assigns nodes to the divs. does onclick on each div.
@@ -107,6 +113,7 @@ function knightIcon(e) {
     e.target.style.backgroundColor = "red"
     // all styles https://www.w3schools.com/jsref/dom_obj_style.asp
     //e.target.style.backgroundImage = "url('http://java2s.com/style/demo/border.png')"
+    // e.target.style.backgroundImage = "url('knight-icon.jpg')"
     e.target.style.backgroundImage = "url('knight-icon.jpg')"
     e.target.style.backgroundSize = 'contain';
 
@@ -122,7 +129,7 @@ function gameBoardOff() {
     }
 }
 
-// on click get tile's data-array e.g. div "a1"
+// on click, get tile's data-array e.g. div "a1"
 function getTile(e) {
     console.log(e.target.getAttribute("data-array"))
     let chessSquare = stringToNode(e.target.dataset.array)
@@ -425,7 +432,7 @@ h6.edgesList = adjList2["h6"];
 h7.edgesList = adjList2["h7"];
 h8.edgesList = adjList2["h8"];
 
-// remember, below array elements are objects, not strings.
+// remember, below array elements are objects, not strings. Array is for stringToNode()
 const chessBoardSquares = [ a1, a2, a3, a4, a5, a6, a7, a8,
                             b1, b2, b3, b4, b5, b6, b7, b8, 
                             c1, c2, c3, c4, c5, c6, c7, c8,
